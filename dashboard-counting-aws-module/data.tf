@@ -1,3 +1,4 @@
+# 1. Fetch the latest Ubuntu 24.04 AMI
 data "aws_ami" "ubuntu" {
   most_recent = true
 

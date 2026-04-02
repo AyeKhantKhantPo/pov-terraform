@@ -1,0 +1,34 @@
+vpc_name                     = "dashboard-counting-app-vpc"
+cidr                         = "172.16.0.0/24"
+region                       = "ap-southeast-1"
+public_subnets_for_dashboard = ["172.16.0.0/28", "172.16.0.16/28", "172.16.0.32/28"]
+azs                          = ["ap-southeast-1a", "ap-southeast-1b", "ap-southeast-1c"]
+private_subnets_for_counting = ["172.16.0.128/28", "172.16.0.144/28", "172.16.0.160/28"]
+enable_nat_gateway           = true
+single_nat_gateway           = true
+tags = {
+  "region"      = "singapore"
+  "Environment" = "dashboard-counting-app"
+}
+public_subnet_tags_for_dashboard = {
+  "Type" = "dashboard-public-subnet"
+}
+private_subnet_tags_for_counting = {
+  "Type" = "counting-private-subnet"
+}
+
+dashboard_instance_name = "dashboard-instance"
+dashboard_instance_type = "t3.micro"
+dashboard_user_data     = "scripts/dashboard.sh.tpl"
+
+key_name = "dashboard-counting-key"
+
+counting_instance_name = "counting-instance"
+counting_instance_type = "t3.micro"
+counting_user_data     = "scripts/counting.sh"
+
+dashboard_sg_name = "dashboard-sg"
+counting_sg_name  = "counting-sg"
+
+dashboard_sg_description = "Security group for dashboard EC2 instance"
+counting_sg_description  = "Security group for counting EC2 instance"

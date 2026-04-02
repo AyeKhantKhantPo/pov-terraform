@@ -1,21 +1,15 @@
 terraform {
-  required_version = ">= 1.14" # Terraform CLI version
+  required_version = ">= 1.14"
 
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "6.37.0"
+      version = ">= 6.37.0"
     }
   }
 }
 
 provider "aws" {
   region  = var.region
-  profile = var.profile
+  profile = "main-tf-admin"
 }
-
-provider_meta "aws" {
-    user_agent = [
-      "github.com/terraform-aws-modules/terraform-aws-vpc"
-    ]
-  }
