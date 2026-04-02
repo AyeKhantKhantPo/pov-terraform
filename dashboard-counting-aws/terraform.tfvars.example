@@ -1,0 +1,11 @@
+profile        = "main-tf-admin"
+prefix1        = "dashboard"
+prefix2        = "counting"
+region         = "ap-southeast-1"
+environment    = "main"
+address_space  = "172.31.0.0/16"
+public_subnet  = "172.31.0.0/20"
+private_subnet = "172.31.16.0/20"
+
+dashboard_instance_type = "t3.micro"
+counting_instance_type  = "t3.micro"
