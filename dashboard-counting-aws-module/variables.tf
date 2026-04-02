@@ -1,3 +1,9 @@
+variable "profile" {
+  description = "The name of the profile to use from the AWS credentials file. Defaults to the profile set in the provider configuration"
+  type        = string
+  default     = null
+}
+
 variable "region" {
   description = "Region where the resource(s) will be managed. Defaults to the region set in the provider configuration"
   type        = string

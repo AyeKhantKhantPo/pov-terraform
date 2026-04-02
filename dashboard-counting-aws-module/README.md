@@ -13,7 +13,7 @@ This project uses Terraform to deploy a two-tier application on AWS. It features
 
 ## Prerequisites
 *   [Terraform](https://www.terraform.io/downloads.html) (>= 1.14)
-*   AWS CLI configured with a profile named `main-tf-admin`.
+*   AWS CLI profile configuration.
 *   A `terraform.tfvars` file (use `terraform.tfvars.example` as a template).
 
 ## Quick Start
@@ -30,7 +30,7 @@ This project uses Terraform to deploy a two-tier application on AWS. It features
 
 3.  **Deploy**:
     ```bash
-    terraform apply
+    terraform apply --auto-approve
     ```
 
 ## Verification & SSH
