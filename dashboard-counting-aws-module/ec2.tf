@@ -12,6 +12,7 @@ module "counting_ec2_instance" {
   associate_public_ip_address = false
   user_data_base64            = base64encode(file("${path.module}/${var.counting_user_data}"))
   user_data_replace_on_change = true
+  create_security_group = false
 
   tags = var.tags
 }
@@ -32,6 +33,7 @@ module "dashboard_ec2_instance" {
     counting_private_ip = module.counting_ec2_instance.private_ip
   }))
   user_data_replace_on_change = true
+  create_security_group = false
 
   tags = var.tags
 }
