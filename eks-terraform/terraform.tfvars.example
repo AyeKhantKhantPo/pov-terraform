@@ -1,0 +1,10 @@
+# AWS Authentication & Region
+region  = "ap-southeast-1"
+profile = "master-eks-admin"
+
+# EKS Cluster Configuration
+cluster_name    = "akkp-eks-sgp-cluster"
+cluster_version = "1.33"
+
+# VPC Configuration
+vpc_cidr = "192.168.0.0/16"
