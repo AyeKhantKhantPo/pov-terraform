@@ -1,0 +1,45 @@
+<powershell>
+
+# Install OpenSSH Server
+$capability = Get-WindowsCapability -Online | Where-Object Name -like "OpenSSH.Server*"
+
+if ($capability.State -ne "Installed") {
+    Add-WindowsCapability -Online -Name $capability.Name
+}
+
+Start-Service sshd
+Set-Service -Name sshd -StartupType Automatic
+
+# Create the firewall rule if it doesn't exist yet
+if (-not (Get-NetFirewallRule -Name "OpenSSH-Server-In-TCP" -ErrorAction SilentlyContinue)) {
+    New-NetFirewallRule `
+        -Name "OpenSSH-Server-In-TCP" `
+        -DisplayName "OpenSSH Server (TCP-In)" `
+        -Direction Inbound `
+        -Enabled True `
+        -Protocol TCP `
+        -Action Allow `
+        -LocalPort 22
+}
+
+# IMPORTANT: By default, Windows creates this firewall rule scoped to the "Private"
+# network profile only. EC2 instances register their network adapter under the "Public"
+# profile, which means the rule above won't apply and SSH will be blocked from outside.
+# Setting the profile to "Any" ensures the rule applies regardless of network profile,
+# allowing inbound SSH connections from external clients.
+Set-NetFirewallRule -Name "OpenSSH-Server-In-TCP" -Profile Any
+
+# Set up SSH key-based authentication for the Administrator user so that
+# no password is required when connecting via SSH (e.g. as a ProxyJump host).
+# Windows OpenSSH uses a special file for Administrator/admin accounts:
+# C:\ProgramData\ssh\administrators_authorized_keys (instead of the usual ~/.ssh/authorized_keys).
+$authorizedKeysPath = "C:\ProgramData\ssh\administrators_authorized_keys"
+$publicKey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDEv86iNpCbTX2Gh5QhcB71O8CpfXPBFDCvzqLKjYF/NIb/mIDTTLuH1LMF7dRg7btaFsIVQWY3i35zrlXVpfAxoqfQoVsHDs49tdGWlhVOaP0jgm/A6BAAetcS3JnubLHl5r92RSieQayJOm51m2hk/TMgBKA+6c011+gsUXIoRrjkTpag+vyWLYj4iGAScx9wUJ6BqdxgC5GC/oXgs5SQbdtyfD+JDWmw3u2J/IAhXdKe1lnl3JWRvUUVzAngfWvdASCdn38Y5blCIPh8mnS7npJs8Szt84dFE4MvVKEaI6Hk3g4XHEScHCP4GIY+DKlsqPtPxEmOHYVLHeuPQFCR"
+
+Set-Content -Path $authorizedKeysPath -Value $publicKey
+
+# Lock down permissions on authorized_keys — OpenSSH will reject it if permissions are too open.
+# Only SYSTEM and Administrators should have access; inherited permissions must be removed.
+icacls $authorizedKeysPath /inheritance:r /grant "SYSTEM:(F)" /grant "BUILTIN\Administrators:(F)"
+
+</powershell>

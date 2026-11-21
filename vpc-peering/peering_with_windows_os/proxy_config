@@ -1,0 +1,40 @@
+Host jump-host
+        HostName 13.250.22.128
+        User Administrator
+        IdentityFile /home/HninPhyu/HelloCloud/CAP/VPC_Intra_Region_Peering/manual/window_image/keyfiles/jump-host-key.pem
+
+Host profile-instance-01
+        HostName 10.0.201.71
+        User Administrator
+        IdentityFile /home/HninPhyu/HelloCloud/CAP/VPC_Intra_Region_Peering/manual/window_image/keyfiles/profile-instance-01-key.pem
+        ProxyJump jump-host
+
+Host profile-instance-02
+        HostName 10.0.202.95
+        User Administrator
+        IdentityFile /home/HninPhyu/HelloCloud/CAP/VPC_Intra_Region_Peering/manual/window_image/keyfiles/profile-instance-02-key.pem
+        ProxyJump jump-host
+
+Host account-instance-01
+        HostName 172.16.201.77
+        User Administrator
+        IdentityFile /home/HninPhyu/HelloCloud/CAP/VPC_Intra_Region_Peering/manual/window_image/keyfiles/account-instance-01-key.pem
+        ProxyJump profile-instance-01
+
+Host account-instance-02
+        HostName 172.16.202.8
+        User Administrator
+        IdentityFile /home/HninPhyu/HelloCloud/CAP/VPC_Intra_Region_Peering/manual/window_image/keyfiles/account-instance-02-key.pem
+        ProxyJump profile-instance-01
+
+Host statement-instance-01
+        HostName 192.168.201.182
+        User Administrator
+        IdentityFile /home/HninPhyu/HelloCloud/CAP/VPC_Intra_Region_Peering/manual/window_image/keyfiles/statement-instance-01-key.pem
+        ProxyJump account-instance-01
+
+Host statement-instance-02
+        HostName 192.168.203.161
+        User Administrator
+        IdentityFile /home/HninPhyu/HelloCloud/CAP/VPC_Intra_Region_Peering/manual/window_image/keyfiles/statement-instance-02-key.pem
+        ProxyJump account-instance-01
